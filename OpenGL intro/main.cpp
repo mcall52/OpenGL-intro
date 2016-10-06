@@ -15,57 +15,96 @@
 int main(int argc, char** argv)
 {
 	Display display(800, 600, "Texture Mapper");
-	std::string mesh_str(""), texture_str("");
+	std::string car_mesh, tire_mesh, lot_mesh, lego_mesh,
+		car_texture, tire_texture, lot_texture, lego_texture;
 
+	car_mesh = "./res/p2files/car.obj";
+	car_texture = "./res/p2files/car.bmp";
 
-	int DISPLAY_WHICH_MESH = 0;
+	tire_mesh = "./res/p2files/tire.obj";
+	tire_texture = "./res/p2files/tire.bmp";
 
-	switch(DISPLAY_WHICH_MESH) {
-		case 0 :
-			mesh_str = "./res/colored_crayon_box.obj";
-			texture_str = "./res/colored_crayon_box.png";
-			break;
-		case 1 :
-			mesh_str = "./res/blue_crayon.obj";
-			texture_str = "./res/green_crayon.png";
-			break;
-		case 2 :
-			mesh_str = "./res/blue_crayon.obj";
-			texture_str = "./res/blue_crayon.png";
-			break;
-		default:
-			mesh_str = "./res/colored_crayon_box.obj";
-			texture_str = "./res/colored_crayon_box.png";
-			break;	
-	}
+	lot_mesh = "./res/p2files/ParkingLot.obj";
+	lot_texture = "./res/p2files/ParkingLot.bmp";
 
-	Mesh mesh(mesh_str);
-	Texture texture(texture_str);
+	lego_mesh = "./res/LegoMan.obj";
+	lego_texture = "./res/gold.jpg";
+
+	//Mesh mesh(mesh_str);
+	Mesh car_m(car_mesh);
+	Mesh tire1_m(tire_mesh);
+	Mesh tire2_m(tire_mesh);
+	Mesh tire3_m(tire_mesh);
+	Mesh tire4_m(tire_mesh);
+	Mesh lot_m(lot_mesh);
+	Mesh lego_m(lego_mesh);
+
+	//Texture texture(texture_str);
+	Texture car_t(car_texture);
+	Texture tire1_t(tire_texture);
+	Texture tire2_t(tire_texture);
+	Texture tire3_t(tire_texture);
+	Texture tire4_t(tire_texture);
+	Texture lot_t(lot_texture);
+	Texture lego_t(lego_texture);
+
 	Shader shader("./res/basicShader");
 	int camera_distance;
-	if (DISPLAY_WHICH_MESH <= 2 && DISPLAY_WHICH_MESH >= 0)
+	//if (DISPLAY_WHICH_MESH <= 2 && DISPLAY_WHICH_MESH >= 0)
 		camera_distance = -5;
-	else
-		camera_distance = -5;
+	//else
+	//	camera_distance = -5;
 
-	Camera camera(glm::vec3(0, 0, camera_distance), 70.0f, ((float)WIDTH / (float)HEIGHT), 0.01f, 1000.0f);
+	Camera camera(glm::vec3(0, 1, camera_distance), 70.0f, ((float)WIDTH / (float)HEIGHT), 0.01f, 1000.0f);
 	Transform transform;
+
+	Transform carTransform(glm::vec3(0,0,0.05), glm::vec3(0,0,0), glm::vec3(1,1,1));
+	Transform tire1Transform(glm::vec3(.4,.15,.52), glm::vec3(0,0,0), glm::vec3(0.25,0.25,0.25));
+	Transform tire2Transform(glm::vec3(.4,.15,-.5), glm::vec3(0,0,0), glm::vec3(0.25,0.25,0.25));
+	Transform tire3Transform(glm::vec3(-.4,.15,.52), glm::vec3(0,3.14,0), glm::vec3(0.25,0.25,0.25));
+	Transform tire4Transform(glm::vec3(-.4,.15,-.5), glm::vec3(0,3.14,0), glm::vec3(0.25,0.25,0.25));
+	Transform lotTransform(glm::vec3(5.3,0,-6), glm::vec3(0,2.1,0), glm::vec3(1,1,1));
+	Transform legoTransform(glm::vec3(.2,.5,0), glm::vec3(0,3.14,0), glm::vec3(.15,.15,.15));
 
 	float counter = 0.0f;
 
 	while (!display.IsClosed()) 
 	{
-		display.Clear(0.0f, 0.30f, 0.0f, 1.0f);
-
-		float sinCounter = sinf(counter);
-		float cosCounter = cosf(counter);
-
-		shader.Bind();
-		texture.Bind();
+		display.Clear(0.0f, 0.0f, 1.0f, 1.0f);
 		shader.Update(transform, camera);
-		mesh.Draw();
-		display.Update();
-		counter += 0.0001f;
+		shader.Bind();
+		
+
+		car_t.Bind();
+		shader.Update(carTransform, camera);
+		car_m.Draw();
+
+		tire1_t.Bind();
+		shader.Update(tire1Transform, camera);
+		tire1_m.Draw();
+		
+		tire2_t.Bind();
+		shader.Update(tire2Transform, camera);
+		tire2_m.Draw();
+
+		tire3_t.Bind();
+		shader.Update(tire3Transform, camera);
+		tire3_m.Draw();
+
+		tire4_t.Bind();
+		shader.Update(tire4Transform, camera);
+		tire4_m.Draw();
+
+		lot_t.Bind();
+		shader.Update(lotTransform, camera);
+		lot_m.Draw();
+
+		lego_t.Bind();
+		shader.Update(legoTransform, camera);
+		lego_m.Draw();
+
+		display.Update(camera, tire2Transform, tire4Transform);
+
 	}
 	return 0;
 }
