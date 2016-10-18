@@ -7,6 +7,7 @@
 #include "texture.h"
 #include "transform.h"
 #include "camera.h"
+#include "Scene.h"
 #include <string>
 
 #define WIDTH 800
@@ -68,31 +69,42 @@ int main(int argc, char** argv)
 
 	float counter = 0.0f;
 
+	//Scene scene(camera, tire4Transform, tire2Transform, tire3Transform, tire1Transform, carTransform, lotTransform);
+
 	while (!display.IsClosed()) 
 	{
 		display.Clear(0.0f, 0.0f, 1.0f, 1.0f);
 		shader.Update(transform, camera);
 		shader.Bind();
 		
+		//parent tires to car
+		//multiply each tire Transform by car transform
+		//tire1Transform.multiply(carTransform);
+		//tire2Transform.multiply(carTransform);
+		//tire3Transform.multiply(carTransform);
+		//tire4Transform.multiply(carTransform);
 
 		car_t.Bind();
 		shader.Update(carTransform, camera);
 		car_m.Draw();
 
 		tire1_t.Bind();
-		shader.Update(tire1Transform, camera);
+		shader.UpdateTire(carTransform, camera, tire1Transform);
 		tire1_m.Draw();
 		
 		tire2_t.Bind();
-		shader.Update(tire2Transform, camera);
+		//shader.Update(tire2Transform, camera);
+		shader.UpdateTire(carTransform, camera, tire2Transform);
 		tire2_m.Draw();
 
 		tire3_t.Bind();
-		shader.Update(tire3Transform, camera);
+		//shader.Update(tire3Transform, camera);
+		shader.UpdateTire(carTransform, camera, tire3Transform);
 		tire3_m.Draw();
 
 		tire4_t.Bind();
-		shader.Update(tire4Transform, camera);
+		//shader.Update(tire4Transform, camera);
+		shader.UpdateTire(carTransform, camera, tire4Transform);
 		tire4_m.Draw();
 
 		lot_t.Bind();
@@ -100,10 +112,11 @@ int main(int argc, char** argv)
 		lot_m.Draw();
 
 		lego_t.Bind();
-		shader.Update(legoTransform, camera);
+		shader.UpdateTire(carTransform, camera, legoTransform);
 		lego_m.Draw();
 
-		display.Update(camera, tire2Transform, tire4Transform);
+		display.Update(camera, tire2Transform, tire4Transform, carTransform, lotTransform);
+		//display.Update(scene);
 
 	}
 	return 0;

@@ -73,6 +73,12 @@ void Shader::Update(const Transform& transform, const Camera& camera)
 	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
 }
 
+void Shader::UpdateTire(const Transform& transform, const Camera& camera, Transform& tire)
+{
+	glm::mat4 model = camera.GetViewProjection() * transform.GetModel() * tire.GetModel();;
+	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
+}
+
 std::string LoadShader(const std::string& fileName)
 {
 	std::ifstream file;

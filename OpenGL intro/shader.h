@@ -14,6 +14,8 @@ public:
 
 	void Bind();
 	void Update(const Transform& transform, const Camera& camera);
+	void UpdateTire(const Transform& transform, const Camera& camera, Transform& tire);
+
 
 	virtual ~Shader();
 protected:
